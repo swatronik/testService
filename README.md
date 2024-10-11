@@ -1,4 +1,5 @@
 # testService
 
-docker-compose build \n
+docker-compose build
+
 docker-compose up
