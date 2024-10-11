@@ -1,0 +1,25 @@
+version: '3'
+services:
+  app:
+    build:
+      context: '.'
+      dockerfile: 'Dockerfile'
+    ports:
+      - "8093:8093"
+    environment:
+      - SQLITE_PATH=/data/database.db
+    volumes:
+      - dataBd:/data/database.db
+
+volumes:
+  dataBd:
+
+networks:
+  gateway:
+    driver: host
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "0.0.0.0"
+    ipam:
+      config:
+        - subnet: 172.95.0.0/16
+          gateway: 172.95.0.1
