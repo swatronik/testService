@@ -9,7 +9,7 @@ services:
     environment:
       - SQLITE_PATH=/data/database.db
     volumes:
-      - dataBd:/data/database.db
+      - dataBd:/var/lib/data/database.db
 
 volumes:
   dataBd:
