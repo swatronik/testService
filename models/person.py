@@ -4,7 +4,7 @@ from fastapi import UploadFile
 from pydantic import BaseModel, json
 
 
-class PersonCreate(BaseModel):
+class Person(BaseModel):
     first_name: Union[str, None]
     second_name: Union[str, None]
     third_name: Union[str, None]
@@ -23,5 +23,5 @@ class PersonCreate(BaseModel):
         return value
 
 
-class Person(PersonCreate):
-    pass
+class PersonDB(Person):
+    id: Union[int, None]
