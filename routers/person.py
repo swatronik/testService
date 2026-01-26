@@ -25,3 +25,13 @@ async def get_all_person():
 @router.post("/add")
 async def add_person(new_person: Person):
     return database.add_person(new_person)
+
+
+@router.delete("/delete")
+async def delete_person(id: int):
+    return database.delete_person(id)
+
+
+@router.put("/update")
+async def update_person(id: int, person: Person):
+    return database.update_person(id, person)

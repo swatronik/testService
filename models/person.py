@@ -5,12 +5,12 @@ from pydantic import BaseModel, json
 
 
 class Person(BaseModel):
-    first_name: Union[str, None]
-    second_name: Union[str, None]
-    third_name: Union[str, None]
-    age: Union[int, None]
-    phone: Union[str, None]
-    nationality: Union[str, None]
+    first_name: Union[str, None] = None
+    second_name: Union[str, None] = None
+    third_name: Union[str, None] = None
+    age: Union[int, None] = None
+    phone: Union[str, None] = None
+    nationality: Union[str, None] = None
 
     @classmethod
     def __get_validators__(cls):

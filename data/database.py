@@ -62,7 +62,7 @@ def get_person(id: int) -> Optional[PersonDB]:
         ))
         result = dict(cursor.fetchone())
 
-        return None if result is None else PersonDB.parse_obj(result)
+        return None if result is None else PersonDB.model_validate(result)
 
 
 def get_all_person() -> List[PersonDB]:
@@ -85,7 +85,7 @@ def get_all_person() -> List[PersonDB]:
         result: List[PersonDB] = []
         for row in cursor.fetchall():
             person = dict(row)
-            result.append(PersonDB.parse_obj(person))
+            result.append(PersonDB.model_validate(person))
         return [] if result is None else result
 
 
@@ -112,8 +112,51 @@ def add_person(person: Person):
                 person.phone,
                 person.nationality,
         ))
-        result = cursor.fetchone()
-        return None if result is None else result
+        return cursor.fetchone()
+
+
+def delete_person(id: int) -> Optional[PersonDB]:
+    """
+    Удалите человека по id
+    :param id: id человека
+    :return: данные человека
+    """
+    with Connect() as cursor:
+        cursor.execute('''
+            DELETE FROM persons
+            WHERE id = ?''', (
+                str(id),
+        ))
+        return cursor.fetchone()
+
+
+def update_person(id: int, person: Person) -> Optional[PersonDB]:
+    """
+    Получить человека по id
+    :param id: id человека
+    :return: данные человека
+    """
+    with Connect() as cursor:
+        cursor.execute('''
+            UPDATE persons
+            SET first_name = COALESCE(?, first_name),
+                second_name = COALESCE(?, second_name),
+                third_name = COALESCE(?, third_name),
+                age = COALESCE(?, age),
+                phone = COALESCE(?, phone),
+                nationality = COALESCE(?, nationality)
+            WHERE id = ?''', (
+                person.first_name,
+                person.second_name,
+                person.third_name,
+                person.age,
+                person.phone,
+                person.nationality,
+                id
+        ))
+        return cursor.fetchone()
+
+
 
 
 def create_user(user: UserInDB):
@@ -132,8 +175,7 @@ def create_user(user: UserInDB):
                 user.username,
                 user.hashed_password,
         ))
-        result = cursor.fetchone()
-        return None if result is None else result
+        return cursor.fetchone()
 
 
 def get_user(username: str)-> Optional[UserInDB]:
@@ -151,7 +193,7 @@ def get_user(username: str)-> Optional[UserInDB]:
         ))
         result = dict(cursor.fetchone())
 
-        return None if result is None else UserInDB.parse_obj(result)
+        return None if result is None else UserInDB.model_validate(result)
 
 
 def delete_user(id: int):
@@ -167,5 +209,4 @@ def delete_user(id: int):
             RETURNING id''', (
                 id,
         ))
-        result = cursor.fetchone()
-        return None if result is None else result
+        return cursor.fetchone()
